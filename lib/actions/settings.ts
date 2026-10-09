@@ -34,29 +34,51 @@ export async function updateSettings(formData: FormData) {
     return { error: authError ?? "Sesi tidak valid." };
   }
 
-  const { data, error } = await supabase
+  // 1. Coba update row id = 1 (hanya memerlukan policy UPDATE di RLS)
+  const { data: updateData, error: updateError } = await supabase
     .from("mosque_settings")
-    .upsert(
-      {
+    .update({
+      ...parsed.data,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", 1)
+    .select();
+
+  // Jika update berhasil dan row 1 ditemukan
+  if (!updateError && updateData && updateData.length > 0) {
+    revalidatePath("/");
+    revalidatePath("/berita");
+    revalidatePath("/galeri");
+    revalidatePath("/admin/pengaturan");
+    return { success: true };
+  }
+
+  // 2. Jika row id = 1 belum ada sama sekali di tabel, lakukan insert
+  if (!updateError && (!updateData || updateData.length === 0)) {
+    const { error: insertError } = await supabase
+      .from("mosque_settings")
+      .insert({
         id: 1,
         ...parsed.data,
         updated_at: new Date().toISOString(),
-      },
-      { onConflict: "id" }
-    )
-    .select();
+      });
 
-  if (error) {
-    return { error: `Gagal menyimpan ke Supabase: ${error.message}` };
+    if (insertError) {
+      return {
+        error: `Gagal membuat data awal di Supabase (${insertError.message}). Jalankan SQL di setup.sql pada Supabase SQL Editor.`,
+      };
+    }
+
+    revalidatePath("/");
+    revalidatePath("/berita");
+    revalidatePath("/galeri");
+    revalidatePath("/admin/pengaturan");
+    return { success: true };
   }
 
-  if (!data || data.length === 0) {
-    return { error: "Data tidak tersimpan. Pastikan tabel 'mosque_settings' dan policy RLS di Supabase sudah dibuat sesuai setup.sql." };
+  if (updateError) {
+    return { error: `Gagal menyimpan ke Supabase: ${updateError.message}` };
   }
 
-  revalidatePath("/");
-  revalidatePath("/berita");
-  revalidatePath("/galeri");
-  revalidatePath("/admin/pengaturan");
   return { success: true };
 }
