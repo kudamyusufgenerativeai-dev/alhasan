@@ -78,7 +78,7 @@ export default async function BeritaDetailPage({ params }: Props) {
 
         {/* Content */}
         <div className="prose mt-10">
-          <ReactMarkdown>{article.content}</ReactMarkdown>
+          <ReactMarkdown>{article.content ?? ""}</ReactMarkdown>
         </div>
 
         {/* Share */}

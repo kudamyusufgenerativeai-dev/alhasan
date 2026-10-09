@@ -23,7 +23,7 @@ function revalidate(slug?: string) {
 export async function createNews(formData: FormData) {
   const raw    = Object.fromEntries(formData.entries());
   const parsed = newsSchema.safeParse(raw);
-  if (!parsed.success) return { error: parsed.error.errors[0].message };
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Input tidak valid" };
 
   const slug = generateSlug(parsed.data.title);
 
@@ -49,7 +49,7 @@ export async function createNews(formData: FormData) {
 export async function updateNews(id: string, currentSlug: string, formData: FormData) {
   const raw    = Object.fromEntries(formData.entries());
   const parsed = newsSchema.safeParse(raw);
-  if (!parsed.success) return { error: parsed.error.errors[0].message };
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Input tidak valid" };
 
   // Use manually-edited slug if provided, otherwise keep existing slug
   const slug = (parsed.data.slug && parsed.data.slug.trim()) ? parsed.data.slug.trim() : currentSlug;

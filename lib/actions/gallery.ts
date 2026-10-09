@@ -55,7 +55,7 @@ export async function uploadPhotos(formData: FormData) {
 export async function updatePhoto(id: string, formData: FormData) {
   const raw    = Object.fromEntries(formData.entries());
   const parsed = photoSchema.safeParse(raw);
-  if (!parsed.success) return { error: parsed.error.errors[0].message };
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Input tidak valid" };
 
   const supabase = await createClient();
   const { error } = await supabase.from("gallery_photos").update({

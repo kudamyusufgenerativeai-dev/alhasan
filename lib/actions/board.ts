@@ -37,7 +37,7 @@ async function uploadPhoto(file: File, supabase: Awaited<ReturnType<typeof creat
 export async function createBoardMember(formData: FormData) {
   const raw    = Object.fromEntries(formData.entries());
   const parsed = memberSchema.safeParse(raw);
-  if (!parsed.success) return { error: parsed.error.errors[0].message };
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Input tidak valid" };
 
   const supabase   = await createClient();
   let   photo_url: string | null = null;
@@ -65,7 +65,7 @@ export async function createBoardMember(formData: FormData) {
 export async function updateBoardMember(id: string, oldPhotoUrl: string | null, formData: FormData) {
   const raw    = Object.fromEntries(formData.entries());
   const parsed = memberSchema.safeParse(raw);
-  if (!parsed.success) return { error: parsed.error.errors[0].message };
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Input tidak valid" };
 
   const supabase   = await createClient();
   let   photo_url  = oldPhotoUrl;

@@ -6,7 +6,7 @@ export interface NewsItem {
   slug: string;
   excerpt: string | null;
   cover_url: string | null;
-  content: string;
+  content?: string;
   is_published: boolean;
   published_at: string;
 }
