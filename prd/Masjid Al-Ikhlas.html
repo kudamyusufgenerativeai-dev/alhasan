@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Masjid Al-Ikhlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{sans:['Geist','ui-sans-serif','system-ui','sans-serif']},colors:{bg:'var(--bg)',soft:'var(--soft)',ink:'var(--ink)',muted:'var(--muted)',line:'var(--line)',pri:'var(--pri)',onpri:'var(--onpri)',tint:'var(--tint)'}}}}
+</script>
+<style>
+:root{--bg:#fff;--soft:#fafcfa;--ink:#1c2620;--muted:#5d6e64;--line:#e4ece6;--pri:#15803d;--onpri:#fff;--tint:#eaf5ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:5rem}
+body{background:var(--bg);color:var(--ink);font-family:Geist,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.ph{background:linear-gradient(135deg,var(--tint),var(--soft))}
+.hero{background:var(--bg)}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="sticky top-0 z-50 bg-bg/90 backdrop-blur border-b border-line" style="top:env(safe-area-inset-top,0px)">
+  <div class="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2 font-semibold">
+      <span class="w-8 h-8 rounded-lg bg-pri text-onpri grid place-items-center text-sm">M</span>
+      <span>Al-Ikhlas</span>
+    </a>
+    <nav class="hidden lg:flex items-center gap-6 text-sm text-muted">
+      <a class="hover:text-ink" href="#tentang">Tentang</a>
+      <a class="hover:text-ink" href="#kegiatan">Kegiatan</a>
+      <a class="hover:text-ink" href="#berita">Berita</a>
+      <a class="hover:text-ink" href="#galeri">Galeri</a>
+      <a class="hover:text-ink" href="#laporan">Laporan</a>
+      <a class="hover:text-ink" href="#pengurus">Pengurus</a>
+      <a class="hover:text-ink" href="#kontak">Kontak</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="#donasi" class="bg-pri text-onpri text-sm font-medium px-4 py-2 rounded-lg">Donasi</a>
+      <button id="menuBtn" class="lg:hidden w-10 h-10 grid place-items-center rounded-lg border border-line" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav id="menu" class="hidden lg:hidden border-t border-line bg-bg px-4 py-2 text-sm">
+    <a class="block py-3" href="#tentang">Tentang</a><a class="block py-3" href="#kegiatan">Kegiatan</a><a class="block py-3" href="#berita">Berita</a><a class="block py-3" href="#galeri">Galeri</a><a class="block py-3" href="#laporan">Laporan</a><a class="block py-3" href="#pengurus">Pengurus</a><a class="block py-3" href="#kontak">Kontak</a>
+  </nav>
+</header>
+
+<main>
+<!-- Hero -->
+<section class="hero">
+  <div class="mx-auto max-w-6xl px-4 py-16 md:py-28 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <p class="inline-block text-xs font-medium text-pri bg-tint rounded-full px-3 py-1 mb-5">Jl. Merdeka No. 12, Medan</p>
+      <h1 class="text-4xl md:text-5xl font-semibold tracking-tight leading-tight">Masjid Al-Ikhlas, rumah bersama untuk beribadah dan berbagi</h1>
+      <p class="mt-5 text-muted leading-relaxed max-w-lg">Pusat ibadah, kajian, dan kegiatan sosial bagi jamaah. Mari makmurkan masjid bersama-sama.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#donasi" class="bg-pri text-onpri font-medium px-5 py-3 rounded-lg">Donasi Sekarang</a>
+        <a href="#tentang" class="border border-line font-medium px-5 py-3 rounded-lg">Tentang Kami</a>
+      </div>
+    </div>
+    <div class="ph rounded-3xl aspect-[4/3] grid place-items-center text-muted text-sm border border-line">
+      Background hero (diganti admin)
+    </div>
+  </div>
+</section>
+
+<!-- Tentang -->
+<section id="tentang" class="py-16 md:py-24">
+  <div class="mx-auto max-w-6xl px-4 grid md:grid-cols-2 gap-10">
+    <div>
+      <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Tentang Masjid</h2>
+      <p class="mt-4 text-muted leading-relaxed">Masjid Al-Ikhlas berdiri sejak 1998 dan melayani jamaah dari lingkungan sekitar. Selain salat berjamaah, kami menyelenggarakan kajian rutin, pendidikan Al-Qur'an, dan program sosial untuk masyarakat.</p>
+    </div>
+    <div class="grid grid-cols-3 gap-3 text-center">
+      <div class="bg-soft rounded-2xl p-4"><p class="text-2xl font-semibold text-pri">1998</p><p class="text-xs text-muted mt-1">Berdiri</p></div>
+      <div class="bg-soft rounded-2xl p-4"><p class="text-2xl font-semibold text-pri">500+</p><p class="text-xs text-muted mt-1">Jamaah</p></div>
+      <div class="bg-soft rounded-2xl p-4"><p class="text-2xl font-semibold text-pri">12</p><p class="text-xs text-muted mt-1">Program</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Kegiatan -->
+<section id="kegiatan" class="py-16 md:py-24">
+  <div class="mx-auto max-w-6xl px-4">
+    <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Kegiatan Mendatang</h2>
+    <div class="mt-8 grid gap-4 md:grid-cols-3">
+      <article class="bg-bg border border-line rounded-2xl p-5">
+        <div class="ph rounded-xl aspect-video mb-4"></div>
+        <p class="text-xs font-medium text-pri">Jum, 10 Okt · 12.00 WIB</p>
+        <h3 class="mt-1 font-semibold">Kajian Jumat Siang</h3>
+        <p class="mt-1 text-sm text-muted">Ruang utama masjid</p>
+      </article>
+      <article class="bg-bg border border-line rounded-2xl p-5">
+        <div class="ph rounded-xl aspect-video mb-4"></div>
+        <p class="text-xs font-medium text-pri">Sab, 11 Okt · 08.00 WIB</p>
+        <h3 class="mt-1 font-semibold">TPA Anak-anak</h3>
+        <p class="mt-1 text-sm text-muted">Aula lantai 2</p>
+      </article>
+      <article class="bg-bg border border-line rounded-2xl p-5">
+        <div class="ph rounded-xl aspect-video mb-4"></div>
+        <p class="text-xs font-medium text-pri">Ming, 12 Okt · 07.00 WIB</p>
+        <h3 class="mt-1 font-semibold">Jumat Berkah &amp; Santunan</h3>
+        <p class="mt-1 text-sm text-muted">Halaman masjid</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Berita -->
+<section id="berita" class="py-16 md:py-24">
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="flex items-end justify-between">
+      <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Berita Terbaru</h2>
+      <a href="#" class="text-sm font-medium text-pri">Lihat semua →</a>
+    </div>
+    <div class="mt-8 grid gap-6 md:grid-cols-3">
+      <a href="#" class="group block">
+        <div class="ph rounded-2xl aspect-video"></div>
+        <p class="mt-3 text-xs text-muted">5 Okt 2026</p>
+        <h3 class="mt-1 font-semibold group-hover:text-pri">Renovasi tempat wudhu selesai dikerjakan</h3>
+        <p class="mt-1 text-sm text-muted">Fasilitas baru kini dapat digunakan jamaah putra dan putri.</p>
+      </a>
+      <a href="#" class="group block">
+        <div class="ph rounded-2xl aspect-video"></div>
+        <p class="mt-3 text-xs text-muted">28 Sep 2026</p>
+        <h3 class="mt-1 font-semibold group-hover:text-pri">Penyaluran 100 paket sembako untuk warga</h3>
+        <p class="mt-1 text-sm text-muted">Program berbagi hasil donasi jamaah bulan September.</p>
+      </a>
+      <a href="#" class="group block">
+        <div class="ph rounded-2xl aspect-video"></div>
+        <p class="mt-3 text-xs text-muted">20 Sep 2026</p>
+        <h3 class="mt-1 font-semibold group-hover:text-pri">Pendaftaran kelas tahsin dibuka</h3>
+        <p class="mt-1 text-sm text-muted">Terbuka untuk dewasa, kelas dimulai awal bulan depan.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Galeri -->
+<section id="galeri" class="py-16 md:py-24 bg-soft">
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="flex items-end justify-between">
+      <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Galeri</h2>
+      <a href="#" class="text-sm font-medium text-pri">Lihat semua →</a>
+    </div>
+    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="ph rounded-xl aspect-square border border-line"></div>
+      <div class="ph rounded-xl aspect-square border border-line"></div>
+      <div class="ph rounded-xl aspect-square border border-line"></div>
+      <div class="ph rounded-xl aspect-square border border-line"></div>
+      <div class="ph rounded-xl aspect-square border border-line"></div>
+      <div class="ph rounded-xl aspect-square border border-line"></div>
+      <div class="ph rounded-xl aspect-square border border-line"></div>
+      <div class="ph rounded-xl aspect-square border border-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Laporan keuangan -->
+<section id="laporan" class="py-16 md:py-24">
+  <div class="mx-auto max-w-6xl px-4">
+    <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Laporan Keuangan</h2>
+    <p class="mt-3 text-muted">Laporan keuangan akan segera tersedia.</p>
+    <div class="mt-8 grid gap-4 sm:grid-cols-3">
+      <div class="border border-line rounded-2xl p-5"><p class="text-sm text-muted">Pemasukan</p><p class="mt-2 text-2xl font-semibold">–</p></div>
+      <div class="border border-line rounded-2xl p-5"><p class="text-sm text-muted">Pengeluaran</p><p class="mt-2 text-2xl font-semibold">–</p></div>
+      <div class="border border-line rounded-2xl p-5 bg-soft"><p class="text-sm text-muted">Saldo</p><p class="mt-2 text-2xl font-semibold text-pri">–</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Pengurus -->
+<section id="pengurus" class="py-16 md:py-24">
+  <div class="mx-auto max-w-6xl px-4">
+    <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Pengurus &amp; Ustaz</h2>
+    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-bg border border-line rounded-2xl p-4 text-center"><div class="ph w-20 h-20 rounded-full mx-auto"></div><p class="mt-3 font-semibold text-sm">H. Ahmad Fauzi</p><p class="text-xs text-muted">Ketua DKM</p></div>
+      <div class="bg-bg border border-line rounded-2xl p-4 text-center"><div class="ph w-20 h-20 rounded-full mx-auto"></div><p class="mt-3 font-semibold text-sm">Ust. Rahmat Hidayat</p><p class="text-xs text-muted">Imam Utama</p></div>
+      <div class="bg-bg border border-line rounded-2xl p-4 text-center"><div class="ph w-20 h-20 rounded-full mx-auto"></div><p class="mt-3 font-semibold text-sm">Budi Santoso</p><p class="text-xs text-muted">Sekretaris</p></div>
+      <div class="bg-bg border border-line rounded-2xl p-4 text-center"><div class="ph w-20 h-20 rounded-full mx-auto"></div><p class="mt-3 font-semibold text-sm">Siti Aminah</p><p class="text-xs text-muted">Bendahara</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Donasi -->
+<section id="donasi" class="py-16 md:py-24">
+  <div class="mx-auto max-w-4xl px-4">
+    <div class="bg-bg border border-line rounded-3xl px-6 py-12 md:py-16 text-center">
+      <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Mari berdonasi untuk masjid</h2>
+      <p class="mt-3 text-muted max-w-xl mx-auto">Setiap kontribusi membantu operasional, pembangunan, dan program sosial masjid.</p>
+      <a href="#" class="mt-7 inline-block bg-pri text-onpri font-medium px-6 py-3 rounded-lg">Donasi via Google Form</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- Footer -->
+<footer id="kontak" class="border-t border-line bg-soft">
+  <div class="mx-auto max-w-6xl px-4 py-12 grid gap-8 md:grid-cols-3">
+    <div>
+      <p class="font-semibold">Masjid Al-Ikhlas</p>
+      <p class="mt-3 text-sm text-muted leading-relaxed">Jl. Merdeka No. 12, Medan, Sumatera Utara</p>
+      <p class="mt-1 text-sm text-muted">0812-3456-7890 · info@alikhlas.id</p>
+      <div class="mt-4 flex gap-3 text-sm text-pri font-medium"><a href="#">Instagram</a><a href="#">Facebook</a><a href="#">YouTube</a></div>
+    </div>
+    <div class="md:col-span-2 ph rounded-2xl min-h-40 grid place-items-center text-sm text-muted border border-line">Peta Google Maps</div>
+  </div>
+  <p class="text-center text-xs text-muted pb-6">© 2026 Masjid Al-Ikhlas</p>
+</footer>
+
+<script>
+document.getElementById('menuBtn').onclick=()=>document.getElementById('menu').classList.toggle('hidden');
+document.querySelectorAll('#menu a').forEach(a=>a.onclick=()=>document.getElementById('menu').classList.add('hidden'));
+</script>
+</body>
+</html>
