@@ -1,9 +1,9 @@
 -- ============================================================
 -- Masjid Website v1.1 – Supabase SQL Setup
--- Jalankan di: Supabase Dashboard > SQL Editor
+-- Jalankan di: Supabase Dashboard > SQL Editor > Run
 -- ============================================================
 
--- ─── Tables ──────────────────────────────────────────────────
+-- ─── 1. Tables ──────────────────────────────────────────────────
 
 create table if not exists mosque_settings (
   id int primary key default 1 check (id = 1),
@@ -26,8 +26,9 @@ create table if not exists mosque_settings (
   tiktok_url text,
   updated_at timestamptz default now()
 );
--- Seed the single row if not exists
-insert into mosque_settings (id) values (1) on conflict do nothing;
+
+-- Seed row default (id = 1) agar query update/select selalu menemukan row
+insert into mosque_settings (id) values (1) on conflict (id) do nothing;
 
 create table if not exists events (
   id uuid primary key default gen_random_uuid(),
@@ -71,7 +72,7 @@ create table if not exists board_members (
   created_at timestamptz default now()
 );
 
--- ─── Row Level Security ────────────────────────────────────────
+-- ─── 2. Enable Row Level Security (RLS) ────────────────────────
 
 alter table mosque_settings  enable row level security;
 alter table events           enable row level security;
@@ -79,50 +80,105 @@ alter table news             enable row level security;
 alter table gallery_photos   enable row level security;
 alter table board_members    enable row level security;
 
--- mosque_settings: public read, no insert/delete from client, only update by authenticated
+-- ─── 3. RLS Policies ──────────────────────────────────────────
+
+-- mosque_settings: publik bisa membaca, user login (authenticated) bisa ubah & tambah
+drop policy if exists "public can read mosque_settings" on mosque_settings;
+drop policy if exists "authenticated can update mosque_settings" on mosque_settings;
+drop policy if exists "authenticated full access mosque_settings" on mosque_settings;
+
 create policy "public can read mosque_settings"
-  on mosque_settings for select to anon using (true);
-create policy "authenticated can update mosque_settings"
-  on mosque_settings for update to authenticated using (true);
+  on mosque_settings for select
+  using (true);
 
--- events: public read (published only), full CRUD for authenticated
+create policy "authenticated full access mosque_settings"
+  on mosque_settings for all
+  to authenticated
+  using (true)
+  with check (true);
+
+-- events: publik bisa membaca event yang dipublish, authenticated full akses
+drop policy if exists "public can read published events" on events;
+drop policy if exists "authenticated full access events" on events;
+
 create policy "public can read published events"
-  on events for select to anon using (is_published = true);
+  on events for select
+  using (is_published = true);
+
 create policy "authenticated full access events"
-  on events for all to authenticated using (true);
+  on events for all
+  to authenticated
+  using (true)
+  with check (true);
 
--- news: public read (published only), full CRUD for authenticated
+-- news: publik bisa membaca berita yang dipublish, authenticated full akses
+drop policy if exists "public can read published news" on news;
+drop policy if exists "authenticated full access news" on news;
+
 create policy "public can read published news"
-  on news for select to anon using (is_published = true);
+  on news for select
+  using (is_published = true);
+
 create policy "authenticated full access news"
-  on news for all to authenticated using (true);
+  on news for all
+  to authenticated
+  using (true)
+  with check (true);
 
--- gallery_photos: public read, full CRUD for authenticated
+-- gallery_photos: publik bisa membaca, authenticated full akses
+drop policy if exists "public can read gallery_photos" on gallery_photos;
+drop policy if exists "authenticated full access gallery_photos" on gallery_photos;
+
 create policy "public can read gallery_photos"
-  on gallery_photos for select to anon using (true);
+  on gallery_photos for select
+  using (true);
+
 create policy "authenticated full access gallery_photos"
-  on gallery_photos for all to authenticated using (true);
+  on gallery_photos for all
+  to authenticated
+  using (true)
+  with check (true);
 
--- board_members: public read, full CRUD for authenticated
+-- board_members: publik bisa membaca, authenticated full akses
+drop policy if exists "public can read board_members" on board_members;
+drop policy if exists "authenticated full access board_members" on board_members;
+
 create policy "public can read board_members"
-  on board_members for select to anon using (true);
+  on board_members for select
+  using (true);
+
 create policy "authenticated full access board_members"
-  on board_members for all to authenticated using (true);
+  on board_members for all
+  to authenticated
+  using (true)
+  with check (true);
 
--- ─── Storage ──────────────────────────────────────────────────
--- Buat bucket "mosque-media" di Supabase Dashboard > Storage:
--- 1. Klik "New bucket" > nama: mosque-media > Public: ON
--- 2. Tambahkan policy storage berikut:
-
--- Storage SELECT (public read):
+-- ─── 4. Storage Bucket Setup ──────────────────────────────────
+-- Buat bucket di: Supabase Dashboard > Storage > Create bucket
+-- Nama: mosque-media
+-- Public bucket: ON (Centang)
+--
+-- Jalankan policy storage berikut setelah bucket dibuat:
+--
+-- insert into storage.buckets (id, name, public)
+-- values ('mosque-media', 'mosque-media', true)
+-- on conflict (id) do nothing;
+--
 -- create policy "public read mosque-media"
---   on storage.objects for select to anon
+--   on storage.objects for select
 --   using ( bucket_id = 'mosque-media' );
-
--- Storage INSERT/UPDATE/DELETE (authenticated only):
--- create policy "authenticated write mosque-media"
---   on storage.objects for insert to authenticated
+--
+-- create policy "authenticated insert mosque-media"
+--   on storage.objects for insert
+--   to authenticated
 --   with check ( bucket_id = 'mosque-media' );
+--
+-- create policy "authenticated update mosque-media"
+--   on storage.objects for update
+--   to authenticated
+--   using ( bucket_id = 'mosque-media' );
+--
 -- create policy "authenticated delete mosque-media"
---   on storage.objects for delete to authenticated
+--   on storage.objects for delete
+--   to authenticated
 --   using ( bucket_id = 'mosque-media' );

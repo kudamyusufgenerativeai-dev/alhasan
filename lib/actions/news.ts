@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { getAuthenticatedSupabase } from "@/lib/actions/common";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { generateSlug } from "@/lib/data/news";
@@ -25,9 +25,11 @@ export async function createNews(formData: FormData) {
   const parsed = newsSchema.safeParse(raw);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Input tidak valid" };
 
+  const { supabase, error: authError } = await getAuthenticatedSupabase();
+  if (authError || !supabase) return { error: authError ?? "Sesi tidak valid." };
+
   const slug = generateSlug(parsed.data.title);
 
-  const supabase = await createClient();
   const { error } = await supabase.from("news").insert({
     title:        parsed.data.title,
     slug,
@@ -39,7 +41,7 @@ export async function createNews(formData: FormData) {
 
   if (error) {
     if (error.code === "23505") return { error: "Slug sudah digunakan. Ubah judul atau edit slug secara manual." };
-    return { error: "Gagal menyimpan berita." };
+    return { error: `Gagal menyimpan berita: ${error.message}` };
   }
 
   revalidate(slug);
@@ -51,10 +53,12 @@ export async function updateNews(id: string, currentSlug: string, formData: Form
   const parsed = newsSchema.safeParse(raw);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Input tidak valid" };
 
+  const { supabase, error: authError } = await getAuthenticatedSupabase();
+  if (authError || !supabase) return { error: authError ?? "Sesi tidak valid." };
+
   // Use manually-edited slug if provided, otherwise keep existing slug
   const slug = (parsed.data.slug && parsed.data.slug.trim()) ? parsed.data.slug.trim() : currentSlug;
 
-  const supabase = await createClient();
   const { error } = await supabase.from("news").update({
     title:        parsed.data.title,
     slug,
@@ -65,7 +69,7 @@ export async function updateNews(id: string, currentSlug: string, formData: Form
 
   if (error) {
     if (error.code === "23505") return { error: "Slug sudah digunakan oleh berita lain." };
-    return { error: "Gagal memperbarui berita." };
+    return { error: `Gagal memperbarui berita: ${error.message}` };
   }
 
   revalidate(slug);
@@ -74,9 +78,11 @@ export async function updateNews(id: string, currentSlug: string, formData: Form
 }
 
 export async function deleteNews(id: string, slug: string) {
-  const supabase = await createClient();
+  const { supabase, error: authError } = await getAuthenticatedSupabase();
+  if (authError || !supabase) return { error: authError ?? "Sesi tidak valid." };
+
   const { error } = await supabase.from("news").delete().eq("id", id);
-  if (error) return { error: "Gagal menghapus berita." };
+  if (error) return { error: `Gagal menghapus berita: ${error.message}` };
   revalidate(slug);
   return { success: true };
 }

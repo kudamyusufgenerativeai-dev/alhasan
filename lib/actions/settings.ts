@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { getAuthenticatedSupabase } from "@/lib/actions/common";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -29,16 +29,34 @@ export async function updateSettings(formData: FormData) {
     return { error: parsed.error.issues[0]?.message ?? "Input tidak valid" };
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("mosque_settings")
-    .update(parsed.data)
-    .eq("id", 1);
+  const { supabase, error: authError } = await getAuthenticatedSupabase();
+  if (authError || !supabase) {
+    return { error: authError ?? "Sesi tidak valid." };
+  }
 
-  if (error) return { error: "Gagal menyimpan. Silakan coba lagi." };
+  const { data, error } = await supabase
+    .from("mosque_settings")
+    .upsert(
+      {
+        id: 1,
+        ...parsed.data,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "id" }
+    )
+    .select();
+
+  if (error) {
+    return { error: `Gagal menyimpan ke Supabase: ${error.message}` };
+  }
+
+  if (!data || data.length === 0) {
+    return { error: "Data tidak tersimpan. Pastikan tabel 'mosque_settings' dan policy RLS di Supabase sudah dibuat sesuai setup.sql." };
+  }
 
   revalidatePath("/");
   revalidatePath("/berita");
   revalidatePath("/galeri");
+  revalidatePath("/admin/pengaturan");
   return { success: true };
 }

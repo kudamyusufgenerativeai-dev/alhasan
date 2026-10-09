@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { getAuthenticatedSupabase } from "@/lib/actions/common";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -23,7 +23,9 @@ export async function createEvent(formData: FormData) {
   const parsed = eventSchema.safeParse(raw);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Input tidak valid" };
 
-  const supabase = await createClient();
+  const { supabase, error: authError } = await getAuthenticatedSupabase();
+  if (authError || !supabase) return { error: authError ?? "Sesi tidak valid." };
+
   const { error } = await supabase.from("events").insert({
     ...parsed.data,
     ends_at:      parsed.data.ends_at      || null,
@@ -32,7 +34,7 @@ export async function createEvent(formData: FormData) {
     is_published: parsed.data.is_published === "true",
   });
 
-  if (error) return { error: "Gagal menyimpan event." };
+  if (error) return { error: `Gagal menyimpan event: ${error.message}` };
   revalidate();
   return { success: true };
 }
@@ -42,7 +44,9 @@ export async function updateEvent(id: string, formData: FormData) {
   const parsed = eventSchema.safeParse(raw);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Input tidak valid" };
 
-  const supabase = await createClient();
+  const { supabase, error: authError } = await getAuthenticatedSupabase();
+  if (authError || !supabase) return { error: authError ?? "Sesi tidak valid." };
+
   const { error } = await supabase.from("events").update({
     ...parsed.data,
     ends_at:      parsed.data.ends_at      || null,
@@ -51,15 +55,17 @@ export async function updateEvent(id: string, formData: FormData) {
     is_published: parsed.data.is_published === "true",
   }).eq("id", id);
 
-  if (error) return { error: "Gagal memperbarui event." };
+  if (error) return { error: `Gagal memperbarui event: ${error.message}` };
   revalidate();
   return { success: true };
 }
 
 export async function deleteEvent(id: string) {
-  const supabase = await createClient();
+  const { supabase, error: authError } = await getAuthenticatedSupabase();
+  if (authError || !supabase) return { error: authError ?? "Sesi tidak valid." };
+
   const { error } = await supabase.from("events").delete().eq("id", id);
-  if (error) return { error: "Gagal menghapus event." };
+  if (error) return { error: `Gagal menghapus event: ${error.message}` };
   revalidate();
   return { success: true };
 }
